@@ -1,0 +1,4 @@
+PyQt5==5.15.9
+qt-material==2.14
+qt_thread_updater==1.1.6
+pynetworktables==2021.0.0
