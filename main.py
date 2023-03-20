@@ -9,6 +9,7 @@ import sys
 from PyQt5.QtWidgets import (QApplication, QMainWindow,
                             QMenuBar, QLabel, QTabWidget, QWidget, QGridLayout)
 from PyQt5.QtGui import QFont
+
 from qt_thread_updater import get_updater
 import qt_material
 
@@ -16,6 +17,7 @@ from networktables import NetworkTables
 
 import about
 import strings
+import widgets
 
 
 __version__ = "0.1.0"
@@ -34,12 +36,27 @@ def value_changed(_, key, value, is_new):
     if "window" in globals().keys():
         if key == 'Mode':
             get_updater().call_latest(window.arm_mode.setText, str(value).replace("_", " ").title())
+            if str(value) == "Scoring":
+                get_updater().call_latest(window.arm_mode_color.setColor, "#4caf50")
+            elif str(value) == "Picking_up":      
+                get_updater().call_latest(window.arm_mode_color.setColor, "#00bcd4")
+            else:
+                get_updater().call_latest(window.arm_mode_color.setColor, "#fafafa")
         elif key == 'Object':
-            get_updater().call_latest(window.arm_obj.setText, str(value).replace('Neither', 'None').replace("_", " ").title())
+            get_updater().call_latest(window.arm_obj.setText, str(value).replace('Neither', 'None')
+                                      .replace("_", " ").title())
+            if str(value) == "Cube":
+                get_updater().call_latest(window.arm_obj_mode_color.setColor, "#9c27b0")
+            elif str(value) == "Cone":
+                get_updater().call_latest(window.arm_obj_mode_color.setColor, "#fdd835")
+            else:
+                get_updater().call_latest(window.arm_obj_mode_color.setColor, "#fafafa")
         elif key == 'ScorePos':
-            get_updater().call_latest(window.s_p.setText, str(value).replace('Neither', 'None').replace("_", " ").title())
+            get_updater().call_latest(window.s_p.setText, str(value).replace('Neither', 'None')
+                                      .replace("_", " ").title())
         elif key == 'PickPos':
-            get_updater().call_latest(window.s_p.setText, str(value).replace('Neither', 'None').replace("_", " ").title())
+            get_updater().call_latest(window.s_p.setText, str(value).replace('Neither', 'None')
+                                      .replace("_", " ").title())
 
 
 class MainWindow(QMainWindow):
@@ -62,6 +79,8 @@ class MainWindow(QMainWindow):
         self.file_menu.addAction(strings.MENU_ABOUT, self.about.show)
         self.file_menu.addAction(strings.MENU_QUIT, self.close)
 
+        self.setMenuBar(self.menu)
+
         # Layout
         self.root_widget = QTabWidget(self)
         self.setCentralWidget(self.root_widget)
@@ -80,6 +99,10 @@ class MainWindow(QMainWindow):
         self.arm_mode.setStyleSheet("font-size: 64px;")
         self.object_tab_layout.addWidget(self.arm_mode, 0, 1)
 
+        self.arm_mode_color = widgets.ColorBlock()
+        self.arm_mode_color.setColor("#fafafa")
+        self.object_tab_layout.addWidget(self.arm_mode_color, 0, 2)
+
         # Arm Object
         self.arm_obj_label = QLabel("Arm Object:")
         self.arm_obj_label.setStyleSheet("font-size: 50px;")
@@ -89,6 +112,10 @@ class MainWindow(QMainWindow):
         self.arm_obj.setStyleSheet("font-size: 64px;")
         self.arm_obj.setFont(QFont(QFont.defaultFamily(QFont()), 22))
         self.object_tab_layout.addWidget(self.arm_obj, 1, 1)
+
+        self.arm_obj_mode_color = widgets.ColorBlock()
+        self.arm_obj_mode_color.setColor("#fafafa")
+        self.object_tab_layout.addWidget(self.arm_obj_mode_color, 1, 2)
 
         # Position
         self.sp_label = QLabel("S/PU Pos:")
@@ -100,7 +127,9 @@ class MainWindow(QMainWindow):
         self.s_p.setFont(QFont(QFont.defaultFamily(QFont()), 22))
         self.object_tab_layout.addWidget(self.s_p, 2, 1)
 
-        self.setMenuBar(self.menu)
+        self.sp_color = widgets.ColorBlock()
+        self.sp_color.setColor("#fafafa")
+        self.object_tab_layout.addWidget(self.sp_color, 2, 2)
 
         self.show()
 
