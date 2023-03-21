@@ -6,7 +6,7 @@ class ColorBlock(QFrame):
     """
     A simple widget ot show a single color
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super(ColorBlock, self).__init__()
 
         self.setFrameShape(QFrame.Box)

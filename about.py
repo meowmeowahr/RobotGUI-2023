@@ -8,7 +8,7 @@ import strings
 
 
 class _WigglyWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super(_WigglyWidget, self).__init__(parent)
 
         self.setBackgroundRole(QPalette.Midlight)
@@ -42,7 +42,7 @@ class _WigglyWidget(QWidget):
             painter.drawText(int(x), int(y) - int((sine_table[index] * metrics.height()) / 600), ch)
             x += metrics.width(ch)
 
-    def setText(self, new_text):
+    def setText(self, new_text: str) -> None:
         self.text = new_text
 
     def timerEvent(self, event):

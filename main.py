@@ -14,6 +14,7 @@ from qt_thread_updater import get_updater
 import qt_material
 
 from networktables import NetworkTables
+import stringcase
 
 import about
 import strings
@@ -52,11 +53,9 @@ def value_changed(_, key, value, is_new):
             else:
                 get_updater().call_latest(window.arm_obj_mode_color.setColor, "#fafafa")
         elif key == 'ScorePos':
-            get_updater().call_latest(window.s_p.setText, str(value).replace('Neither', 'None')
-                                      .replace("_", " ").title())
+            get_updater().call_latest(window.s_p.setText, stringcase.titlecase(str(value).replace('Neither', 'None')))
         elif key == 'PickPos':
-            get_updater().call_latest(window.s_p.setText, str(value).replace('Neither', 'None')
-                                      .replace("_", " ").title())
+            get_updater().call_latest(window.s_p.setText, stringcase.titlecase(str(value).replace('Neither', 'None')))
 
 
 class MainWindow(QMainWindow):
