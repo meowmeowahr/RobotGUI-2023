@@ -32,14 +32,14 @@ args = parser.parse_args()
 
 def value_changed(_, key, value, is_new):
     """ Callback for Network Tables """
-    print(f"valueChanged: key: '{key}'; value: {value}; isNew: {is_new}")
+    logging.debug(f"valueChanged: key: '{key}'; value: {value}; isNew: {is_new}")
 
     if "window" in globals().keys():
         if key == 'Mode':
             get_updater().call_latest(window.arm_mode.setText, str(value).replace("_", " ").title())
             if str(value) == "Scoring":
                 get_updater().call_latest(window.arm_mode_color.setColor, "#4caf50")
-            elif str(value) == "Picking_up":      
+            elif str(value) == "Picking_up":
                 get_updater().call_latest(window.arm_mode_color.setColor, "#00bcd4")
             else:
                 get_updater().call_latest(window.arm_mode_color.setColor, "#fafafa")
@@ -53,9 +53,11 @@ def value_changed(_, key, value, is_new):
             else:
                 get_updater().call_latest(window.arm_obj_mode_color.setColor, "#fafafa")
         elif key == 'ScorePos':
-            get_updater().call_latest(window.s_p.setText, stringcase.titlecase(str(value).replace('Neither', 'None')))
+            get_updater().call_latest(window.s_p.setText,
+                                      stringcase.titlecase(str(value).replace('Neither', 'None')))
         elif key == 'PickPos':
-            get_updater().call_latest(window.s_p.setText, stringcase.titlecase(str(value).replace('Neither', 'None')))
+            get_updater().call_latest(window.s_p.setText,
+                                      stringcase.titlecase(str(value).replace('Neither', 'None')))
 
 
 class MainWindow(QMainWindow):
