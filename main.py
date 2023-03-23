@@ -138,7 +138,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     app = QApplication(sys.argv)
-    qt_material.apply_stylesheet(app, theme="dark_blue.xml")
+    qt_material.apply_stylesheet(app, theme="dark_red.xml")
     window = MainWindow()
 
     NetworkTables.initialize(server=args.ip)

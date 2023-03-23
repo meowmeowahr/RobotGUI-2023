@@ -36,7 +36,7 @@ class _WigglyWidget(QWidget):
 
         for i, ch in enumerate(self.text):
             index = (self.step + i) % 16
-            color.setRgb(0, 200, 0)
+            color.setHsv((15 - i) * 16, 255, 191)
             painter.setPen(color)
             painter.setFont(QFont(QFont.defaultFamily(QFont()), 22))
             painter.drawText(int(x), int(y) - int((sine_table[index] * metrics.height()) / 600), ch)
