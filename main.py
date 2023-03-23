@@ -4,7 +4,9 @@ RobotGUI
 
 import logging
 import argparse
+import json
 import sys
+import os
 
 from PyQt5.QtWidgets import (QApplication, QMainWindow,
                             QMenuBar, QLabel, QTabWidget, QWidget, QGridLayout)
@@ -27,6 +29,10 @@ __version__ = "0.1.0"
 parser = argparse.ArgumentParser()
 parser.add_argument("-ip", "--ip", help="ip address to connect to",
                     required=False, default="10.63.69.2")
+parser.add_argument("-s", "--settings", help="location of settings file",
+                    required=False,
+                    default=os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                         "settings.json"))
 args = parser.parse_args()
 
 
@@ -136,11 +142,18 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-    # NetTables
-    logging.basicConfig(level=logging.INFO)
+    with open(args.settings, encoding="UTF-8") as file:
+        settings = json.load(file)
+
+    logging.basicConfig(level=settings["log_level"])
+
+    logging.debug(f"Loaded settings from {args.settings}")
 
     app = QApplication(sys.argv)
-    qt_material.apply_stylesheet(app, theme="dark_red.xml")
+    if settings["dark_mode"]:
+        qt_material.apply_stylesheet(app, theme="dark_red.xml")
+    else:
+        qt_material.apply_stylesheet(app, theme="light_red.xml")
     window = MainWindow()
 
     NetworkTables.initialize(server=args.ip)
