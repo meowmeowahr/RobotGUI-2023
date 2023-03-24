@@ -8,8 +8,9 @@ import json
 import sys
 import os
 
-from PyQt5.QtWidgets import (QApplication, QMainWindow,
-                            QMenuBar, QLabel, QTabWidget, QWidget, QGridLayout)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
+                             QTabWidget, QWidget, QGridLayout,
+                             QVBoxLayout, QCheckBox)
 from PyQt5.QtGui import QFont
 
 from qt_thread_updater import get_updater
@@ -82,9 +83,15 @@ class MainWindow(QMainWindow):
         self.about = about.AboutBox()
         self.about.version.setText(__version__)
 
+        self.setup = Settings()
+
         self.file_menu = self.menu.addMenu(strings.MENU_FILE)
-        self.file_menu.addAction(strings.MENU_ABOUT, self.about.show)
+        self.file_menu.addAction(strings.MENU_SETUP, self.setup.show)
         self.file_menu.addAction(strings.MENU_QUIT, self.close)
+
+        self.help_menu = self.menu.addMenu(strings.MENU_HELP)
+        self.help_menu.addAction(strings.MENU_ABOUT, self.about.show)
+        self.help_menu.addAction(strings.MENU_ABOUT_QT, QApplication.instance().aboutQt)
 
         self.setMenuBar(self.menu)
 
@@ -139,6 +146,39 @@ class MainWindow(QMainWindow):
         self.object_tab_layout.addWidget(self.sp_color, 2, 2)
 
         self.show()
+
+
+class Settings(QMainWindow):
+    def __init__(self):
+        super(Settings, self).__init__()
+
+        self.setWindowTitle(strings.SETUP_WINDOW_TITLE)
+
+        self.tabs = QTabWidget()
+        self.setCentralWidget(self.tabs)
+
+        # Theme
+        self.theme_widget = QWidget()
+        self.theme_layout = QVBoxLayout()
+        self.theme_widget.setLayout(self.theme_layout)
+        self.tabs.addTab(self.theme_widget, strings.TAB_SETUP_THEME)
+
+        self.theme_dark_mode = QCheckBox(strings.CHECK_DARK_MODE)
+        self.theme_dark_mode.setChecked(settings["dark_mode"])
+        self.theme_dark_mode.clicked.connect(lambda: self.enable_setting("dark_mode", self.theme_dark_mode.isChecked()))
+        self.theme_layout.addWidget(self.theme_dark_mode)
+
+    def enable_setting(self, key, enabled=True):
+        settings[key] = enabled
+
+        if key == "dark_mode":
+            if settings["dark_mode"]:
+                qt_material.apply_stylesheet(app, theme="dark_red.xml")
+            else:
+                qt_material.apply_stylesheet(app, theme="light_red.xml")
+
+        with open(args.settings, "w", encoding="UTF-8") as file:
+            json.dump(settings, file, indent=2)
 
 
 if __name__ == "__main__":
