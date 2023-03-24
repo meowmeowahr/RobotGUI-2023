@@ -1,6 +1,6 @@
 """ Widgets for RobotGUI """
 
-from PyQt5.QtWidgets import QFrame
+from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLineEdit, QLabel, QWidget
 
 class ColorBlock(QFrame):
     """
@@ -19,3 +19,19 @@ class ColorBlock(QFrame):
         Sets the color of the widget
         """
         self.setStyleSheet(f"background-color: {color};")
+
+class QNamedLineEdit(QWidget):
+    """
+    A Named QLineEdit
+    """
+    def __init__(self, text: str = ""):
+        super().__init__()
+
+        self.__layout = QHBoxLayout()
+        self.setLayout(self.__layout)
+
+        self.label = QLabel(text)
+        self.__layout.addWidget(self.label)
+
+        self.lineedit = QLineEdit()
+        self.__layout.addWidget(self.lineedit)

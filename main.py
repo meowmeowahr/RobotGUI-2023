@@ -28,8 +28,6 @@ __version__ = "0.1.0"
 
 # parse command line args
 parser = argparse.ArgumentParser()
-parser.add_argument("-ip", "--ip", help="ip address to connect to",
-                    required=False, default="10.63.69.2")
 parser.add_argument("-s", "--settings", help="location of settings file",
                     required=False,
                     default=os.path.join(os.path.dirname(os.path.realpath(__file__)),
@@ -168,6 +166,21 @@ class Settings(QMainWindow):
         self.theme_dark_mode.clicked.connect(lambda: self.enable_setting("dark_mode", self.theme_dark_mode.isChecked()))
         self.theme_layout.addWidget(self.theme_dark_mode)
 
+        # Connection
+        self.conns_widget = QWidget()
+        self.conns_layout = QVBoxLayout()
+        self.conns_widget.setLayout(self.conns_layout)
+        self.tabs.addTab(self.conns_widget, strings.TAB_SETUP_CONNS)
+
+        self.conns_warning = QLabel(strings.LABEL_CONNS_WARNING)
+        self.conns_layout.addWidget(self.conns_warning)
+
+        self.ip_editor = widgets.QNamedLineEdit(strings.EDIT_SETUP_IP)
+        self.ip_editor.lineedit.setPlaceholderText(strings.EDIT_SETUP_IP_PLHOLD)
+        self.ip_editor.lineedit.setText(settings["ip"])
+        self.ip_editor.lineedit.textChanged.connect(lambda: self.update_setting("ip", self.ip_editor.lineedit.text()))
+        self.conns_layout.addWidget(self.ip_editor)
+
     def enable_setting(self, key, enabled=True):
         settings[key] = enabled
 
@@ -180,6 +193,11 @@ class Settings(QMainWindow):
         with open(args.settings, "w", encoding="UTF-8") as file:
             json.dump(settings, file, indent=2)
 
+    def update_setting(self, key, value):
+        settings[key] = value
+
+        with open(args.settings, "w", encoding="UTF-8") as file:
+            json.dump(settings, file, indent=2)
 
 if __name__ == "__main__":
     with open(args.settings, encoding="UTF-8") as file:
@@ -196,7 +214,7 @@ if __name__ == "__main__":
         qt_material.apply_stylesheet(app, theme="light_red.xml")
     window = MainWindow()
 
-    NetworkTables.initialize(server=args.ip)
+    NetworkTables.initialize(server=settings["ip"])
     sd = NetworkTables.getTable("SmartDashboard")
     sd.addEntryListener(value_changed)  # has to be done after setting up window
 

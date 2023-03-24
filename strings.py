@@ -18,8 +18,14 @@ TAB_OBJECT = "Operator Status"
 SETUP_WINDOW_TITLE = "Settings"
 
 TAB_SETUP_THEME = "Theme"
+TAB_SETUP_CONNS = "Connection"
+
+LABEL_CONNS_WARNING = "Restart the application to these settings to apply"
 
 CHECK_DARK_MODE = "Dark Mode"
+
+EDIT_SETUP_IP = "IP Address"
+EDIT_SETUP_IP_PLHOLD = "XX.XX.XX.XX"
 
 
 if __name__ == "__main__":
