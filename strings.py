@@ -13,6 +13,7 @@ MENU_SETUP = "Settings"
 MENU_QUIT = "Quit"
 
 TAB_OBJECT = "Operator Status"
+TAB_COLOR = "Color Sensor"
 
 # Settings
 SETUP_WINDOW_TITLE = "Settings"

@@ -2,6 +2,10 @@
 
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLineEdit, QLabel, QWidget
 
+
+def rgb_to_hex(rgb):
+    return '%02x%02x%02x' % rgb
+
 class ColorBlock(QFrame):
     """
     A simple widget ot show a single color
@@ -19,6 +23,13 @@ class ColorBlock(QFrame):
         Sets the color of the widget
         """
         self.setStyleSheet(f"background-color: {color};")
+
+    def setRGB(self, r, g, b):
+        """
+        Sets the color of the widget in (r, g, b)
+        """
+        color_str = rgb_to_hex((int(r),int(g), int(b)))
+        self.setStyleSheet(f"background-color: #{color_str};")
 
 class QNamedLineEdit(QWidget):
     """

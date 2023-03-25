@@ -10,8 +10,10 @@ import os
 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
-                             QVBoxLayout, QCheckBox)
+                             QVBoxLayout, QHBoxLayout, QCheckBox,
+                             QProgressBar)
 from PyQt5.QtGui import QFont
+from PyQt5.QtCore import QSize
 
 from qt_thread_updater import get_updater
 import qt_material
@@ -33,6 +35,10 @@ parser.add_argument("-s", "--settings", help="location of settings file",
                     default=os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                          "settings.json"))
 args = parser.parse_args()
+
+red = 0
+green = 0
+blue = 0
 
 
 def value_changed(_, key, value, is_new):
@@ -64,6 +70,26 @@ def value_changed(_, key, value, is_new):
             get_updater().call_latest(window.s_p.setText,
                                       stringcase.titlecase(str(value).replace('Neither', 'None')))
 
+def color_value_changed(_, key, value, is_new):
+    """ Callback for Network Tables """
+    global red, green, blue
+    logging.debug(f"colorValueChanged: key: '{key}'; value: {value}; isNew: {is_new}")
+
+    if "window" in globals().keys():
+        if key == "colorSensorRed":
+            red = float(value)
+            get_updater().call_latest(window.color_red.setText, f"Red: {red}")
+            get_updater().call_latest(window.color_red_bar.setValue, int(red))
+        elif key == "colorSensorGreen":
+            green = float(value)
+            get_updater().call_latest(window.color_green.setText, f"Green: {green}")
+            get_updater().call_latest(window.color_green_bar.setValue, int(green))
+        elif key == "colorSensorBlue":
+            blue = float(value)
+            get_updater().call_latest(window.color_blue.setText, f"Blue: {blue}")
+            get_updater().call_latest(window.color_blue_bar.setValue, int(blue))
+
+        get_updater().call_latest(window.color.setRGB, red, green, blue)
 
 class MainWindow(QMainWindow):
     """ Main Window for RobotGUI """
@@ -101,6 +127,11 @@ class MainWindow(QMainWindow):
         self.object_tab_layout = QGridLayout()
         self.object_tab_widget.setLayout(self.object_tab_layout)
         self.root_widget.addTab(self.object_tab_widget, strings.TAB_OBJECT)
+
+        self.color_tab_widget = QWidget()
+        self.color_tab_layout = QHBoxLayout()
+        self.color_tab_widget.setLayout(self.color_tab_layout)
+        self.root_widget.addTab(self.color_tab_widget, strings.TAB_COLOR)
 
         # Arm Mode
         self.arm_mode_label = QLabel("Arm Mode:")
@@ -142,6 +173,38 @@ class MainWindow(QMainWindow):
         self.sp_color = widgets.ColorBlock()
         self.sp_color.setColor("#fafafa")
         self.object_tab_layout.addWidget(self.sp_color, 2, 2)
+
+        # Color
+        self.color = widgets.ColorBlock()
+        self.color.setFixedSize(QSize(240, 240))
+        self.color_tab_layout.addWidget(self.color)
+
+        self.color_side_layout = QVBoxLayout()
+        self.color_tab_layout.addLayout(self.color_side_layout)
+
+        self.color_red = QLabel("Red: Unknown")
+        self.color_side_layout.addWidget(self.color_red)
+
+        self.color_red_bar = QProgressBar()
+        self.color_red_bar.setRange(0, 255)
+        self.color_red_bar.setStyleSheet("QProgressBar::chunk { background-color: #f44336; }")
+        self.color_side_layout.addWidget(self.color_red_bar)
+
+        self.color_green = QLabel("Green: Unknown")
+        self.color_side_layout.addWidget(self.color_green)
+
+        self.color_green_bar = QProgressBar()
+        self.color_green_bar.setRange(0, 255)
+        self.color_green_bar.setStyleSheet("QProgressBar::chunk { background-color: #4caf50; }")
+        self.color_side_layout.addWidget(self.color_green_bar)
+
+        self.color_blue = QLabel("Blue: Unknown")
+        self.color_side_layout.addWidget(self.color_blue)
+
+        self.color_blue_bar = QProgressBar()
+        self.color_blue_bar.setRange(0, 255)
+        self.color_blue_bar.setStyleSheet("QProgressBar::chunk { background-color: #2196f3; }")
+        self.color_side_layout.addWidget(self.color_blue_bar)
 
         self.show()
 
@@ -216,6 +279,8 @@ if __name__ == "__main__":
 
     NetworkTables.initialize(server=settings["ip"])
     sd = NetworkTables.getTable("SmartDashboard")
+    color = NetworkTables.getTable("RevColorSensor_V3")
     sd.addEntryListener(value_changed)  # has to be done after setting up window
+    color.addEntryListener(color_value_changed)  # has to be done after setting up window
 
     sys.exit(app.exec())
