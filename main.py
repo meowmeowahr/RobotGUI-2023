@@ -249,9 +249,9 @@ class Settings(QMainWindow):
 
         if key == "dark_mode":
             if settings["dark_mode"]:
-                qt_material.apply_stylesheet(app, theme="dark_red.xml")
+                qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
             else:
-                qt_material.apply_stylesheet(app, theme="light_red.xml")
+                qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
 
         with open(args.settings, "w", encoding="UTF-8") as file:
             json.dump(settings, file, indent=2)
@@ -272,9 +272,9 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     if settings["dark_mode"]:
-        qt_material.apply_stylesheet(app, theme="dark_red.xml")
+        qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
     else:
-        qt_material.apply_stylesheet(app, theme="light_red.xml")
+        qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
     window = MainWindow()
 
     NetworkTables.initialize(server=settings["ip"])

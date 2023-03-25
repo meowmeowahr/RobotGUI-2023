@@ -1,0 +1,11 @@
+QComboBox QAbstractItemView {{
+    color: {QTMATERIAL_SECONDARYTEXTCOLOR};
+}}
+
+QComboBox {{
+    color: {QTMATERIAL_SECONDARYTEXTCOLOR};
+}}
+
+QLineEdit {{
+    color: {QTMATERIAL_SECONDARYTEXTCOLOR};
+}}
