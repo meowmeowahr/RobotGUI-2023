@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
                              QProgressBar)
 from PyQt5.QtGui import QFont
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, QTimer
 
 from qt_thread_updater import get_updater
 import qt_material
@@ -120,18 +120,33 @@ class MainWindow(QMainWindow):
         self.setMenuBar(self.menu)
 
         # Layout
-        self.root_widget = QTabWidget(self)
+        self.root_widget = QWidget()
         self.setCentralWidget(self.root_widget)
+        self.root_layout = QVBoxLayout()
+        self.root_widget.setLayout(self.root_layout)
+
+        # Connection
+        self.connection_status_widget = widgets.ConnStatus(strings.CONN_NOT_CONNECTED.format(settings["ip"]))
+        self.root_layout.addWidget(self.connection_status_widget)
+
+        self.connection_timer = QTimer()
+        self.connection_timer.setInterval(1000)
+        self.connection_timer.timeout.connect(self.update_conns)
+        self.connection_timer.start()
+
+        # Tabs
+        self.tab_widget = QTabWidget(self)
+        self.root_layout.addWidget(self.tab_widget)
 
         self.object_tab_widget = QWidget()
         self.object_tab_layout = QGridLayout()
         self.object_tab_widget.setLayout(self.object_tab_layout)
-        self.root_widget.addTab(self.object_tab_widget, strings.TAB_OBJECT)
+        self.tab_widget.addTab(self.object_tab_widget, strings.TAB_OBJECT)
 
         self.color_tab_widget = QWidget()
         self.color_tab_layout = QHBoxLayout()
         self.color_tab_widget.setLayout(self.color_tab_layout)
-        self.root_widget.addTab(self.color_tab_widget, strings.TAB_COLOR)
+        self.tab_widget.addTab(self.color_tab_widget, strings.TAB_COLOR)
 
         # Arm Mode
         self.arm_mode_label = QLabel("Arm Mode:")
@@ -208,6 +223,9 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+    def update_conns(self):
+        self.connection_status_widget.setVisible(not NetworkTables.isConnected())
+
 
 class Settings(QMainWindow):
     def __init__(self):
@@ -270,17 +288,17 @@ if __name__ == "__main__":
 
     logging.debug(f"Loaded settings from {args.settings}")
 
+    NetworkTables.initialize(server=settings["ip"])
+    sd = NetworkTables.getTable("SmartDashboard")
+    color = NetworkTables.getTable("RevColorSensor_V3")
+    sd.addEntryListener(value_changed)  # has to be done after setting up window
+    color.addEntryListener(color_value_changed)  # has to be done after setting up window
+
     app = QApplication(sys.argv)
     if settings["dark_mode"]:
         qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
     else:
         qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
     window = MainWindow()
-
-    NetworkTables.initialize(server=settings["ip"])
-    sd = NetworkTables.getTable("SmartDashboard")
-    color = NetworkTables.getTable("RevColorSensor_V3")
-    sd.addEntryListener(value_changed)  # has to be done after setting up window
-    color.addEntryListener(color_value_changed)  # has to be done after setting up window
 
     sys.exit(app.exec())
