@@ -30,6 +30,12 @@ CHECK_DARK_MODE = "Dark Mode"
 EDIT_SETUP_IP = "IP Address"
 EDIT_SETUP_IP_PLHOLD = "XX.XX.XX.XX"
 
+EDIT_SETUP_CAM = "Camera Address"
+EDIT_SETUP_CAM_PLHOLD = "Camera HTTP Link"
+
+# Cams
+CAM_TITLE = "Camera Stream"
+
 
 if __name__ == "__main__":
     print("This file is not meant to be run directly")

@@ -13,7 +13,8 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
                              QProgressBar)
 from PyQt5.QtGui import QFont
-from PyQt5.QtCore import QSize, QTimer
+from PyQt5.QtCore import QSize, QTimer, QUrl
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 from qt_thread_updater import get_updater
 import qt_material
@@ -262,6 +263,12 @@ class Settings(QMainWindow):
         self.ip_editor.lineedit.textChanged.connect(lambda: self.update_setting("ip", self.ip_editor.lineedit.text()))
         self.conns_layout.addWidget(self.ip_editor)
 
+        self.cam_editor = widgets.QNamedLineEdit(strings.EDIT_SETUP_CAM)
+        self.cam_editor.lineedit.setPlaceholderText(strings.EDIT_SETUP_CAM_PLHOLD)
+        self.cam_editor.lineedit.setText(settings["camera_http"])
+        self.cam_editor.lineedit.textChanged.connect(lambda: self.update_setting("camera_http", self.cam_editor.lineedit.text()))
+        self.conns_layout.addWidget(self.cam_editor)
+
     def enable_setting(self, key, enabled=True):
         settings[key] = enabled
 
@@ -279,6 +286,19 @@ class Settings(QMainWindow):
 
         with open(args.settings, "w", encoding="UTF-8") as file:
             json.dump(settings, file, indent=2)
+
+class CamMonitor(QMainWindow):
+    def __init__(self):
+        super(CamMonitor, self).__init__()
+
+        self.setWindowTitle(strings.CAM_TITLE)
+
+        self.web = QWebEngineView()
+        self.web.setUrl(QUrl(settings["camera_http"]))
+
+        self.setCentralWidget(self.web)
+
+        self.show()
 
 if __name__ == "__main__":
     with open(args.settings, encoding="UTF-8") as file:
@@ -299,6 +319,8 @@ if __name__ == "__main__":
         qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
     else:
         qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
+    
+    cam = CamMonitor()
     window = MainWindow()
 
     sys.exit(app.exec())
