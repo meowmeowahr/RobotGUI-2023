@@ -11,13 +11,14 @@ import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar)
+                             QProgressBar, QToolBar, QAction)
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 from qt_thread_updater import get_updater
 import qt_material
+import qtawesome
 
 from networktables import NetworkTables
 import stringcase
@@ -295,6 +296,24 @@ class CamMonitor(QMainWindow):
 
         self.web = QWebEngineView()
         self.web.setUrl(QUrl(settings["camera_http"]))
+
+        self.toolbar = QToolBar(strings.CAM_TOOLBAR)
+        self.addToolBar(self.toolbar)
+
+        self.refresh_button = QAction()
+        self.refresh_button.setIcon(qtawesome.icon("mdi.refresh", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
+        self.refresh_button.triggered.connect(self.web.reload)
+        self.toolbar.addAction(self.refresh_button)
+
+        self.zoom_in_button = QAction()
+        self.zoom_in_button.setIcon(qtawesome.icon("mdi.magnify-plus", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
+        self.zoom_in_button.triggered.connect(lambda: self.web.setZoomFactor(self.web.zoomFactor() + 0.2))
+        self.toolbar.addAction(self.zoom_in_button)
+
+        self.zoom_out_button = QAction()
+        self.zoom_out_button.setIcon(qtawesome.icon("mdi.magnify-minus", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
+        self.zoom_out_button.triggered.connect(lambda: self.web.setZoomFactor(self.web.zoomFactor() - 0.2))
+        self.toolbar.addAction(self.zoom_out_button)
 
         self.setCentralWidget(self.web)
 

@@ -36,6 +36,8 @@ EDIT_SETUP_CAM_PLHOLD = "Camera HTTP Link"
 # Cams
 CAM_TITLE = "Camera Stream"
 
+CAM_TOOLBAR = "Camera Browser Toolbar"
+
 
 if __name__ == "__main__":
     print("This file is not meant to be run directly")
