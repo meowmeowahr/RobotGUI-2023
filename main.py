@@ -102,6 +102,7 @@ class MainWindow(QMainWindow):
 
         # Title
         self.setWindowTitle(strings.WINDOW_TITLE)
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), "res/icons/icon.svg")))
 
         # Menu
         self.menu = QMenuBar(self)
