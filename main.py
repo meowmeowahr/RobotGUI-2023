@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
                              QProgressBar, QToolBar, QAction)
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
@@ -234,6 +234,7 @@ class Settings(QMainWindow):
         super(Settings, self).__init__()
 
         self.setWindowTitle(strings.SETUP_WINDOW_TITLE)
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), "res/icons/icon.svg")))
 
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
@@ -293,6 +294,7 @@ class CamMonitor(QMainWindow):
         super(CamMonitor, self).__init__()
 
         self.setWindowTitle(strings.CAM_TITLE)
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), "res/icons/icon.svg")))
 
         self.web = QWebEngineView()
         self.web.setUrl(QUrl(settings["camera_http"]))
