@@ -22,8 +22,10 @@ SETUP_WINDOW_TITLE = "Settings"
 
 TAB_SETUP_THEME = "Theme"
 TAB_SETUP_CONNS = "Connection"
+TAB_SETUP_CAM = "Camera"
 
 LABEL_CONNS_WARNING = "Restart the application to these settings to apply"
+LABEL_CAM_WARNING = "Restart the application to these settings to apply"
 
 CHECK_DARK_MODE = "Dark Mode"
 
@@ -32,6 +34,8 @@ EDIT_SETUP_IP_PLHOLD = "XX.XX.XX.XX"
 
 EDIT_SETUP_CAM = "Camera Address"
 EDIT_SETUP_CAM_PLHOLD = "Camera HTTP Link"
+
+SPIN_CAM_SCREEN = "Default Camera Display"
 
 # Cams
 CAM_TITLE = "Camera Stream"

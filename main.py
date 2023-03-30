@@ -11,7 +11,8 @@ import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar, QToolBar, QAction, QDesktopWidget)
+                             QProgressBar, QToolBar, QAction, QDesktopWidget,
+                             QSpinBox)
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -271,6 +272,21 @@ class Settings(QMainWindow):
         self.cam_editor.lineedit.setText(settings["camera_http"])
         self.cam_editor.lineedit.textChanged.connect(lambda: self.update_setting("camera_http", self.cam_editor.lineedit.text()))
         self.conns_layout.addWidget(self.cam_editor)
+
+        # Cam
+        self.cam_widget = QWidget()
+        self.cam_layout = QVBoxLayout()
+        self.cam_widget.setLayout(self.cam_layout)
+        self.tabs.addTab(self.cam_widget, strings.TAB_SETUP_CAM)
+
+        self.cam_warning = QLabel(strings.LABEL_CAM_WARNING)
+        self.cam_layout.addWidget(self.cam_warning)
+
+        self.cam_screen = widgets.QNamedSpinBox(strings.SPIN_CAM_SCREEN)
+        self.cam_screen.spin.setRange(0, 5)
+        self.cam_screen.spin.valueChanged.connect(lambda: self.update_setting("camera_screen", self.cam_screen.spin.value()))
+        self.cam_layout.addWidget(self.cam_screen)
+
 
     def enable_setting(self, key, enabled=True):
         settings[key] = enabled

@@ -1,6 +1,7 @@
 """ Widgets for RobotGUI """
 
-from PyQt5.QtWidgets import (QFrame, QHBoxLayout, QLineEdit, QLabel, QWidget)
+from PyQt5.QtWidgets import (QFrame, QHBoxLayout, QLineEdit, QLabel, QWidget,
+                             QSpinBox)
 from PyQt5.QtCore import Qt
 
 
@@ -47,6 +48,23 @@ class QNamedLineEdit(QWidget):
 
         self.lineedit = QLineEdit()
         self.__layout.addWidget(self.lineedit)
+
+
+class QNamedSpinBox(QWidget):
+    """
+    A Named QSpinBox
+    """
+    def __init__(self, text: str = ""):
+        super().__init__()
+
+        self.__layout = QHBoxLayout()
+        self.setLayout(self.__layout)
+
+        self.label = QLabel(text)
+        self.__layout.addWidget(self.label)
+
+        self.spin = QSpinBox()
+        self.__layout.addWidget(self.spin)
 
 class ConnStatus(QFrame):
     def __init__(self, text = "") -> None:

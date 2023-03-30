@@ -9,3 +9,7 @@ QComboBox {{
 QLineEdit {{
     color: {QTMATERIAL_SECONDARYTEXTCOLOR};
 }}
+
+QSpinBox {{
+    color: {QTMATERIAL_SECONDARYTEXTCOLOR};
+}}
