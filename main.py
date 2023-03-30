@@ -11,7 +11,7 @@ import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar, QToolBar, QAction)
+                             QProgressBar, QToolBar, QAction, QDesktopWidget)
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -319,6 +319,9 @@ class CamMonitor(QMainWindow):
         self.toolbar.addAction(self.zoom_out_button)
 
         self.setCentralWidget(self.web)
+
+        monitor = QDesktopWidget().screenGeometry(settings["camera_screen"])
+        self.move(monitor.center())
 
         self.show()
 
