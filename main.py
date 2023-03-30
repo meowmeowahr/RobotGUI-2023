@@ -11,8 +11,7 @@ import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar, QToolBar, QAction, QDesktopWidget,
-                             QSpinBox)
+                             QProgressBar, QToolBar, QAction, QDesktopWidget)
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -73,6 +72,7 @@ def value_changed(_, key, value, is_new):
             get_updater().call_latest(window.s_p.setText,
                                       stringcase.titlecase(str(value).replace('Neither', 'None')))
 
+
 def color_value_changed(_, key, value, is_new):
     """ Callback for Network Tables """
     global red, green, blue
@@ -93,6 +93,7 @@ def color_value_changed(_, key, value, is_new):
             get_updater().call_latest(window.color_blue_bar.setValue, int(blue))
 
         get_updater().call_latest(window.color.setRGB, red, green, blue)
+
 
 class MainWindow(QMainWindow):
     """ Main Window for RobotGUI """
@@ -270,7 +271,8 @@ class Settings(QMainWindow):
         self.cam_editor = widgets.QNamedLineEdit(strings.EDIT_SETUP_CAM)
         self.cam_editor.lineedit.setPlaceholderText(strings.EDIT_SETUP_CAM_PLHOLD)
         self.cam_editor.lineedit.setText(settings["camera_http"])
-        self.cam_editor.lineedit.textChanged.connect(lambda: self.update_setting("camera_http", self.cam_editor.lineedit.text()))
+        self.cam_editor.lineedit.textChanged.connect(lambda: self.update_setting("camera_http",
+                                                                                 self.cam_editor.lineedit.text()))
         self.conns_layout.addWidget(self.cam_editor)
 
         # Cam
@@ -284,11 +286,12 @@ class Settings(QMainWindow):
 
         self.cam_screen = widgets.QNamedSpinBox(strings.SPIN_CAM_SCREEN)
         self.cam_screen.spin.setRange(0, 5)
-        self.cam_screen.spin.valueChanged.connect(lambda: self.update_setting("camera_screen", self.cam_screen.spin.value()))
+        self.cam_screen.spin.valueChanged.connect(lambda: self.update_setting("camera_screen",
+                                                                              self.cam_screen.spin.value()))
         self.cam_layout.addWidget(self.cam_screen)
 
-
-    def enable_setting(self, key, enabled=True):
+    @staticmethod
+    def enable_setting(key, enabled=True):
         settings[key] = enabled
 
         if key == "dark_mode":
@@ -300,11 +303,13 @@ class Settings(QMainWindow):
         with open(args.settings, "w", encoding="UTF-8") as file:
             json.dump(settings, file, indent=2)
 
-    def update_setting(self, key, value):
+    @staticmethod
+    def update_setting(key, value):
         settings[key] = value
 
         with open(args.settings, "w", encoding="UTF-8") as file:
             json.dump(settings, file, indent=2)
+
 
 class CamMonitor(QMainWindow):
     def __init__(self):
@@ -334,12 +339,27 @@ class CamMonitor(QMainWindow):
         self.zoom_out_button.triggered.connect(lambda: self.web.setZoomFactor(self.web.zoomFactor() - 0.2))
         self.toolbar.addAction(self.zoom_out_button)
 
+        self.fullscreen_button = QAction()
+        self.fullscreen_button.setIcon(qtawesome.icon("mdi.fullscreen", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
+        self.fullscreen_button.triggered.connect(self.toggle_fullscreen)
+        self.toolbar.addAction(self.fullscreen_button)
+
         self.setCentralWidget(self.web)
 
         monitor = QDesktopWidget().screenGeometry(settings["camera_screen"])
         self.move(monitor.center())
 
-        self.show()
+        if settings["camera_screen"] > 0 and QDesktopWidget().screenCount() > 1:
+            self.showFullScreen()
+        else:
+            self.show()
+
+    def toggle_fullscreen(self):
+        if self.isFullScreen():
+            self.showNormal()
+        else:
+            self.showFullScreen()
+
 
 if __name__ == "__main__":
     with open(args.settings, encoding="UTF-8") as file:
@@ -356,6 +376,7 @@ if __name__ == "__main__":
     color.addEntryListener(color_value_changed)  # has to be done after setting up window
 
     app = QApplication(sys.argv)
+
     if settings["dark_mode"]:
         qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
     else:
