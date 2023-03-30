@@ -3,5 +3,7 @@
   "dark_mode": true,
   "ip": "localhost",
   "camera_http": "http://10.63.69.14:1181/stream.mjpg?1680129953477",
-  "camera_screen": 1
+  "camera_screen": 1,
+  "cam_fullscreen": false,
+  "cam_fullsreen": false
 }

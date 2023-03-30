@@ -95,6 +95,26 @@ def color_value_changed(_, key, value, is_new):
         get_updater().call_latest(window.color.setRGB, red, green, blue)
 
 
+def enable_setting(key, enabled=True):
+    settings[key] = enabled
+
+    if key == "dark_mode":
+        if settings["dark_mode"]:
+            qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
+        else:
+            qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
+
+    with open(args.settings, "w", encoding="UTF-8") as file:
+        json.dump(settings, file, indent=2)
+
+
+def update_setting(key, value):
+    settings[key] = value
+
+    with open(args.settings, "w", encoding="UTF-8") as file:
+        json.dump(settings, file, indent=2)
+
+
 class MainWindow(QMainWindow):
     """ Main Window for RobotGUI """
 
@@ -250,7 +270,7 @@ class Settings(QMainWindow):
 
         self.theme_dark_mode = QCheckBox(strings.CHECK_DARK_MODE)
         self.theme_dark_mode.setChecked(settings["dark_mode"])
-        self.theme_dark_mode.clicked.connect(lambda: self.enable_setting("dark_mode", self.theme_dark_mode.isChecked()))
+        self.theme_dark_mode.clicked.connect(lambda: enable_setting("dark_mode", self.theme_dark_mode.isChecked()))
         self.theme_layout.addWidget(self.theme_dark_mode)
 
         # Connection
@@ -265,14 +285,14 @@ class Settings(QMainWindow):
         self.ip_editor = widgets.QNamedLineEdit(strings.EDIT_SETUP_IP)
         self.ip_editor.lineedit.setPlaceholderText(strings.EDIT_SETUP_IP_PLHOLD)
         self.ip_editor.lineedit.setText(settings["ip"])
-        self.ip_editor.lineedit.textChanged.connect(lambda: self.update_setting("ip", self.ip_editor.lineedit.text()))
+        self.ip_editor.lineedit.textChanged.connect(lambda: update_setting("ip", self.ip_editor.lineedit.text()))
         self.conns_layout.addWidget(self.ip_editor)
 
         self.cam_editor = widgets.QNamedLineEdit(strings.EDIT_SETUP_CAM)
         self.cam_editor.lineedit.setPlaceholderText(strings.EDIT_SETUP_CAM_PLHOLD)
         self.cam_editor.lineedit.setText(settings["camera_http"])
-        self.cam_editor.lineedit.textChanged.connect(lambda: self.update_setting("camera_http",
-                                                                                 self.cam_editor.lineedit.text()))
+        self.cam_editor.lineedit.textChanged.connect(lambda: update_setting("camera_http",
+                                                                            self.cam_editor.lineedit.text()))
         self.conns_layout.addWidget(self.cam_editor)
 
         # Cam
@@ -286,29 +306,8 @@ class Settings(QMainWindow):
 
         self.cam_screen = widgets.QNamedSpinBox(strings.SPIN_CAM_SCREEN)
         self.cam_screen.spin.setRange(0, 5)
-        self.cam_screen.spin.valueChanged.connect(lambda: self.update_setting("camera_screen",
-                                                                              self.cam_screen.spin.value()))
+        self.cam_screen.spin.valueChanged.connect(lambda: update_setting("camera_screen", self.cam_screen.spin.value()))
         self.cam_layout.addWidget(self.cam_screen)
-
-    @staticmethod
-    def enable_setting(key, enabled=True):
-        settings[key] = enabled
-
-        if key == "dark_mode":
-            if settings["dark_mode"]:
-                qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
-            else:
-                qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
-
-        with open(args.settings, "w", encoding="UTF-8") as file:
-            json.dump(settings, file, indent=2)
-
-    @staticmethod
-    def update_setting(key, value):
-        settings[key] = value
-
-        with open(args.settings, "w", encoding="UTF-8") as file:
-            json.dump(settings, file, indent=2)
 
 
 class CamMonitor(QMainWindow):
@@ -349,7 +348,7 @@ class CamMonitor(QMainWindow):
         monitor = QDesktopWidget().screenGeometry(settings["camera_screen"])
         self.move(monitor.center())
 
-        if settings["camera_screen"] > 0 and QDesktopWidget().screenCount() > 1:
+        if (settings["camera_screen"] > 0 and QDesktopWidget().screenCount() > 1) or (settings["cam_fullscreen"]):
             self.showFullScreen()
         else:
             self.show()
@@ -359,6 +358,7 @@ class CamMonitor(QMainWindow):
             self.showNormal()
         else:
             self.showFullScreen()
+        update_setting("cam_fullscreen", self.isFullScreen())
 
 
 if __name__ == "__main__":
