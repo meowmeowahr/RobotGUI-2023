@@ -28,7 +28,7 @@ import strings
 import widgets
 
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 # parse command line args
 parser = argparse.ArgumentParser()
