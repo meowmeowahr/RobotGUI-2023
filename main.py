@@ -11,7 +11,8 @@ import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar, QToolBar, QAction, QDesktopWidget)
+                             QProgressBar, QToolBar, QAction, QDesktopWidget,
+                             QToolButton)
 from PyQt5.QtGui import QFont, QIcon, QCloseEvent
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -332,30 +333,35 @@ class CamMonitor(QMainWindow):
         self.toolbar = QToolBar(strings.CAM_TOOLBAR)
         self.addToolBar(self.toolbar)
 
-        self.refresh_button = QAction()
+        self.refresh_button = QToolButton()
+        self.refresh_button.setIconSize(QSize(72, 72))
         self.refresh_button.setIcon(qtawesome.icon("mdi.refresh", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
-        self.refresh_button.triggered.connect(self.web.reload)
-        self.toolbar.addAction(self.refresh_button)
+        self.refresh_button.clicked.connect(self.web.reload)
+        self.toolbar.addWidget(self.refresh_button)
 
-        self.zoom_in_button = QAction()
+        self.zoom_in_button = QToolButton()
+        self.zoom_in_button.setIconSize(QSize(72, 72))
         self.zoom_in_button.setIcon(qtawesome.icon("mdi.magnify-plus", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
-        self.zoom_in_button.triggered.connect(lambda: self.web.setZoomFactor(self.web.zoomFactor() + 0.2))
-        self.toolbar.addAction(self.zoom_in_button)
+        self.zoom_in_button.clicked.connect(lambda: self.web.setZoomFactor(self.web.zoomFactor() + 0.2))
+        self.toolbar.addWidget(self.zoom_in_button)
 
-        self.zoom_out_button = QAction()
+        self.zoom_out_button = QToolButton()
+        self.zoom_out_button.setIconSize(QSize(72, 72))
         self.zoom_out_button.setIcon(qtawesome.icon("mdi.magnify-minus", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
-        self.zoom_out_button.triggered.connect(lambda: self.web.setZoomFactor(self.web.zoomFactor() - 0.2))
-        self.toolbar.addAction(self.zoom_out_button)
+        self.zoom_out_button.clicked.connect(lambda: self.web.setZoomFactor(self.web.zoomFactor() - 0.2))
+        self.toolbar.addWidget(self.zoom_out_button)
 
-        self.fullscreen_button = QAction()
+        self.fullscreen_button = QToolButton()
+        self.fullscreen_button.setIconSize(QSize(72, 72))
         self.fullscreen_button.setIcon(qtawesome.icon("mdi.fullscreen", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
-        self.fullscreen_button.triggered.connect(self.toggle_fullscreen)
-        self.toolbar.addAction(self.fullscreen_button)
+        self.fullscreen_button.clicked.connect(self.toggle_fullscreen)
+        self.toolbar.addWidget(self.fullscreen_button)
 
-        self.exit_button = QAction()
+        self.exit_button = QToolButton()
+        self.exit_button.setIconSize(QSize(72, 72))
         self.exit_button.setIcon(qtawesome.icon("mdi.close", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
-        self.exit_button.triggered.connect(close_all_windows)
-        self.toolbar.addAction(self.exit_button)
+        self.exit_button.clicked.connect(close_all_windows)
+        self.toolbar.addWidget(self.exit_button)
 
         self.setCentralWidget(self.web)
 
