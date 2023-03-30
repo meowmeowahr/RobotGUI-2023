@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
                              QProgressBar, QToolBar, QAction, QDesktopWidget)
-from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtGui import QFont, QIcon, QCloseEvent
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
@@ -113,6 +113,11 @@ def update_setting(key, value):
 
     with open(args.settings, "w", encoding="UTF-8") as file:
         json.dump(settings, file, indent=2)
+
+
+def close_all_windows():
+    window.close()
+    cam.close()
 
 
 class MainWindow(QMainWindow):
@@ -251,6 +256,10 @@ class MainWindow(QMainWindow):
     def update_conns(self):
         self.connection_status_widget.setVisible(not NetworkTables.isConnected())
 
+    def closeEvent(self, a0: QCloseEvent) -> None:
+        close_all_windows()
+        a0.accept()
+
 
 class Settings(QMainWindow):
     def __init__(self):
@@ -342,6 +351,11 @@ class CamMonitor(QMainWindow):
         self.fullscreen_button.setIcon(qtawesome.icon("mdi.fullscreen", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
         self.fullscreen_button.triggered.connect(self.toggle_fullscreen)
         self.toolbar.addAction(self.fullscreen_button)
+
+        self.exit_button = QAction()
+        self.exit_button.setIcon(qtawesome.icon("mdi.close", color=os.environ["QTMATERIAL_PRIMARYCOLOR"]))
+        self.exit_button.triggered.connect(close_all_windows)
+        self.toolbar.addAction(self.exit_button)
 
         self.setCentralWidget(self.web)
 
