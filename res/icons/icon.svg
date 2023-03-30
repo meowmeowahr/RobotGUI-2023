@@ -11,9 +11,9 @@
   <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" style="display:inline">
     <circle style="fill:#dd0f12;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" id="path1600" cx="512" cy="512" r="503.60654"/>
     <g id="g1137" transform="translate(-0.90625,8.2528684e-4)" style="stroke:#000000;stroke-width:24;stroke-dasharray:none;stroke-opacity:1;paint-order:normal">
-      <path style="fill:#000000;stroke:#000000;stroke-width:24;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" d="m 510.5,58.5 -60,195 59,712 64,-714 z" id="path267"/>
-      <path style="fill:#000000;stroke:#000000;stroke-width:24;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal" d="m 404.40625,259.5 -190,-90 110,520 -53.5,-39.50083 108.5,204.50083 -65,-490 105,55 z" id="path269" sodipodi:nodetypes="cccccccc"/>
-      <path style="fill:#000000;stroke:#000000;stroke-width:24;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal" d="m 621.40625,259.5 190,-90 -110,520 49.5,-39.50083 -104.5,204.50083 65,-490 -105,55 z" id="path269-3" sodipodi:nodetypes="cccccccc"/>
+      <path style="fill:#000000;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" d="m 510.5,58.5 -60,195 59,712 64,-714 z" id="path267"/>
+      <path style="fill:#000000;stroke:#ffffff;stroke-width:10;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal" d="m 404.40625,259.5 -190,-90 110,520 -53.5,-39.50083 108.5,204.50083 -65,-490 105,55 z" id="path269" sodipodi:nodetypes="cccccccc"/>
+      <path style="fill:#000000;stroke:#ffffff;stroke-width:10;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal" d="m 621.40625,259.5 190,-90 -110,520 49.5,-39.50083 -104.5,204.50083 65,-490 -105,55 z" id="path269-3" sodipodi:nodetypes="cccccccc"/>
     </g>
   </g>
   <script id="mesh_polyfill" type="text/javascript">
