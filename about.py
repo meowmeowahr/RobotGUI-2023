@@ -1,4 +1,4 @@
-""" The about box used in RobotGUI """
+""" The About Box used in RobotGUI """
 
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 from PyQt5.QtCore import Qt, QBasicTimer, QSize
@@ -15,7 +15,7 @@ class _WigglyWidget(QWidget):
         self.setAutoFillBackground(True)
 
         new_font = self.font()
-        new_font.setPointSize(new_font.pointSize() + 20)
+        new_font.setPointSize(new_font.pointSize() + 18)
         self.setFont(new_font)
 
         self.timer = QBasicTimer()
@@ -76,7 +76,7 @@ class AboutBox(QWidget):
 
         self.__ee = _WigglyWidget()
         self.__ee.setText(strings.ROBOT_NAME_EE)
-        self.__ee.setFixedSize(QSize(256, 96))
+        self.__ee.setFixedSize(QSize(280, 96))
         self.__ee.hide()
         self.root_layout.addWidget(self.__ee, alignment=Qt.AlignCenter)
 
