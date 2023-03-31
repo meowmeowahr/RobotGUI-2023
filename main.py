@@ -37,6 +37,15 @@ import widgets
 
 __version__ = "0.3.0"
 
+DEFAULT_SETTINGS = {
+  "log_level": 20,
+  "dark_mode": True,
+  "ip": "10.63.69.2",
+  "camera_http": "http://10.63.69.14:1181/stream.mjpg?1680129953477",
+  "camera_screen": 1,
+  "cam_fullscreen": True
+}
+
 # parse command line args
 parser = argparse.ArgumentParser()
 parser.add_argument("-s", "--settings", help="location of settings file",
@@ -440,8 +449,12 @@ class CamMonitor(QMainWindow):
 
 if __name__ == "__main__":
     # settings
-    with open(args.settings, encoding="UTF-8") as f:
-        settings = json.load(f)
+    if os.path.exists(args.settings):
+        with open(args.settings, encoding="UTF-8") as f:
+            settings = json.load(f)
+    else:
+        settings = DEFAULT_SETTINGS
+        save_settings()
 
     # logging
     logging.basicConfig(level=settings["log_level"])
