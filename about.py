@@ -57,14 +57,14 @@ class AboutBox(QWidget):
     def __init__(self):
         super(AboutBox, self).__init__()
 
-        self.setWindowTitle(strings.WINDOW_TITLE)
+        self.setWindowTitle(strings.APP_NAME)
 
         self.root_layout = QVBoxLayout()
         self.setLayout(self.root_layout)
 
         self.__ee_cnt = 0
 
-        self.title = QLabel(strings.WINDOW_TITLE)
+        self.title = QLabel(strings.APP_NAME)
         self.title.setStyleSheet("font-size: 26px;")
         self.title.mouseReleaseEvent = self.__ee_event
         self.title.setAlignment(Qt.AlignCenter)

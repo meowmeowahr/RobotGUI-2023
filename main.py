@@ -141,6 +141,10 @@ def enable_setting(key, enabled=True):
         else:
             qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
 
+    save_settings()
+
+
+def save_settings():
     with open(args.settings, "w", encoding="UTF-8") as file:
         json.dump(settings, file, indent=2)
 
@@ -148,8 +152,7 @@ def enable_setting(key, enabled=True):
 def update_setting(key, value):
     settings[key] = value
 
-    with open(args.settings, "w", encoding="UTF-8") as file:
-        json.dump(settings, file, indent=2)
+    save_settings()
 
 
 def close_all_windows():
@@ -165,7 +168,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         # Title
-        self.setWindowTitle(strings.WINDOW_TITLE)
+        self.setWindowTitle(strings.APP_NAME)
         self.setWindowIcon(QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), "res/icons/icon.svg")))
 
         # Menu
@@ -436,26 +439,34 @@ class CamMonitor(QMainWindow):
 
 
 if __name__ == "__main__":
-    with open(args.settings, encoding="UTF-8") as file:
-        settings = json.load(file)
+    # settings
+    with open(args.settings, encoding="UTF-8") as f:
+        settings = json.load(f)
 
+    # logging
     logging.basicConfig(level=settings["log_level"])
-
     logging.debug(f"Loaded settings from {args.settings}")
 
+    # NT
     NetworkTables.initialize(server=settings["ip"])
     sd = NetworkTables.getTable("SmartDashboard")
     color = NetworkTables.getTable("RevColorSensor_V3")
     sd.addEntryListener(value_changed)  # has to be done after setting up window
     color.addEntryListener(color_value_changed)  # has to be done after setting up window
 
+    # Qt Application
     app = QApplication(sys.argv)
+    app.setApplicationVersion(__version__)
+    app.setApplicationName(strings.APP_NAME)
+    app.setApplicationDisplayName(strings.APP_NAME)
 
+    # Theme Setup
     if settings["dark_mode"]:
         qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
     else:
         qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
-    
+
+    # Windows
     cam = CamMonitor()
     window = MainWindow()
 
