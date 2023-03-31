@@ -1,7 +1,7 @@
 PyQt5==5.15.9
-PyQtWebEngine
+PyQtWebEngine==5.15.6
 qt-material==2.14
-qtawesome
+qtawesome==1.2.3
 qt_thread_updater==1.1.6
 pynetworktables==2021.0.0
 stringcase==1.2.0
