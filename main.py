@@ -2,25 +2,31 @@
 RobotGUI
 """
 
+# System
 import logging
 import argparse
 import json
 import sys
 import os
+import re
 
+# Qt
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar, QToolBar, QAction, QDesktopWidget,
+                             QProgressBar, QToolBar, QDesktopWidget,
                              QToolButton)
 from PyQt5.QtGui import QFont, QIcon, QCloseEvent
 from PyQt5.QtCore import QSize, QTimer, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
+
+# Misc GUI
 from qt_thread_updater import get_updater
 import qt_material
 import qtawesome
 
+# Misc
 from networktables import NetworkTables
 import stringcase
 
@@ -72,6 +78,36 @@ def value_changed(_, key, value, is_new):
         elif key == 'PickPos':
             get_updater().call_latest(window.s_p.setText,
                                       stringcase.titlecase(str(value).replace('Neither', 'None')))
+        elif re.match(r"Mod \d Cancoder", key):
+            module = int(str(key)[4])
+            if module == 0:
+                get_updater().call_latest(window.swerve_mod_0.setCancoderValue, value)
+            elif module == 1:
+                get_updater().call_latest(window.swerve_mod_1.setCancoderValue, value)
+            elif module == 2:
+                get_updater().call_latest(window.swerve_mod_2.setCancoderValue, value)
+            elif module == 3:
+                get_updater().call_latest(window.swerve_mod_3.setCancoderValue, value)
+        elif re.match(r"Mod \d Integrated", key):
+            module = int(str(key)[4])
+            if module == 0:
+                get_updater().call_latest(window.swerve_mod_0.setIntegratedValue, value)
+            elif module == 1:
+                get_updater().call_latest(window.swerve_mod_1.setIntegratedValue, value)
+            elif module == 2:
+                get_updater().call_latest(window.swerve_mod_2.setIntegratedValue, value)
+            elif module == 3:
+                get_updater().call_latest(window.swerve_mod_3.setIntegratedValue, value)
+        elif re.match(r"Mod \d Velocity", key):
+            module = int(str(key)[4])
+            if module == 0:
+                get_updater().call_latest(window.swerve_mod_0.setVelocityValue, value)
+            elif module == 1:
+                get_updater().call_latest(window.swerve_mod_1.setVelocityValue, value)
+            elif module == 2:
+                get_updater().call_latest(window.swerve_mod_2.setVelocityValue, value)
+            elif module == 3:
+                get_updater().call_latest(window.swerve_mod_3.setVelocityValue, value)
 
 
 def color_value_changed(_, key, value, is_new):
@@ -179,6 +215,11 @@ class MainWindow(QMainWindow):
         self.color_tab_widget.setLayout(self.color_tab_layout)
         self.tab_widget.addTab(self.color_tab_widget, strings.TAB_COLOR)
 
+        self.swerve_tab_widget = QWidget()
+        self.swerve_tab_layout = QGridLayout()
+        self.swerve_tab_widget.setLayout(self.swerve_tab_layout)
+        self.tab_widget.addTab(self.swerve_tab_widget, strings.TAB_SWERVE)
+
         # Arm Mode
         self.arm_mode_label = QLabel("Arm Mode:")
         self.arm_mode_label.setStyleSheet("font-size: 50px;")
@@ -251,6 +292,19 @@ class MainWindow(QMainWindow):
         self.color_blue_bar.setRange(0, 255)
         self.color_blue_bar.setStyleSheet("QProgressBar::chunk { background-color: #2196f3; }")
         self.color_side_layout.addWidget(self.color_blue_bar)
+
+        # Swerve
+        self.swerve_mod_0 = widgets.Swerve(strings.SWERVE_MOD.format(0))
+        self.swerve_tab_layout.addWidget(self.swerve_mod_0, 0, 0)
+
+        self.swerve_mod_1 = widgets.Swerve(strings.SWERVE_MOD.format(1))
+        self.swerve_tab_layout.addWidget(self.swerve_mod_1, 0, 1)
+
+        self.swerve_mod_2 = widgets.Swerve(strings.SWERVE_MOD.format(2))
+        self.swerve_tab_layout.addWidget(self.swerve_mod_2, 1, 0)
+
+        self.swerve_mod_3 = widgets.Swerve(strings.SWERVE_MOD.format(3))
+        self.swerve_tab_layout.addWidget(self.swerve_mod_3, 1, 1)
 
         self.show()
 

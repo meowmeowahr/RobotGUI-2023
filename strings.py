@@ -16,6 +16,15 @@ MENU_QUIT = "Quit"
 
 TAB_OBJECT = "Operator Status"
 TAB_COLOR = "Color Sensor"
+TAB_SWERVE = "Swerve"
+
+TAB_SWERVE_CHILD_0 = "Mod 0"
+
+LABEL_CANCODER_TITLE = "Cancoder"
+LABEL_INTEGRATED_TITLE = "Intergrated"
+LABEL_VELOCITY_TITLE = "Velocity"
+
+SWERVE_MOD = "Swerve Mod {0}"
 
 # Settings
 SETUP_WINDOW_TITLE = "Settings"
@@ -41,6 +50,9 @@ SPIN_CAM_SCREEN = "Default Camera Display"
 CAM_TITLE = "Camera Stream"
 
 CAM_TOOLBAR = "Camera Browser Toolbar"
+
+# Misc
+UNKNOWN = "Unknown"
 
 
 if __name__ == "__main__":

@@ -13,3 +13,29 @@ QLineEdit {{
 QSpinBox {{
     color: {QTMATERIAL_SECONDARYTEXTCOLOR};
 }}
+
+.swerve_frame {{
+    background-color: {QTMATERIAL_SECONDARYCOLOR};
+}}
+
+.swerve_title {{
+    color: {QTMATERIAL_PRIMARYCOLOR};
+    font-weight: bold;
+    font-size: 14px;
+}}
+
+.cancoder_title {{
+    color: {QTMATERIAL_PRIMARYCOLOR};
+    font-weight: bold;
+}}
+
+
+.integrated_title {{
+    color: {QTMATERIAL_PRIMARYCOLOR};
+    font-weight: bold;
+}}
+
+.velocity_title {{
+    color: {QTMATERIAL_PRIMARYCOLOR};
+    font-weight: bold;
+}}
