@@ -35,7 +35,7 @@ import strings
 import widgets
 
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 DEFAULT_SETTINGS = {
   "log_level": 20,
