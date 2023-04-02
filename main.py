@@ -6,6 +6,7 @@ RobotGUI
 import logging
 import argparse
 import json
+import platform
 import sys
 import os
 import re
@@ -22,11 +23,15 @@ from PyQt6.QtGui import QFont, QIcon, QCloseEvent, QGuiApplication
 from PyQt6.QtCore import QSize, QTimer, QUrl, Qt
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
-
 # Misc GUI
 from qt_thread_updater import get_updater
 import qt_material
 import qtawesome
+
+# Windows 10/11
+if platform.system() == "Windows":
+    from ctypes import byref, c_bool, sizeof, windll
+    from ctypes.wintypes import BOOL
 
 # Misc
 from networktables import NetworkTables
@@ -152,6 +157,11 @@ def enable_setting(key, enabled=True):
             qt_material.apply_stylesheet(app, theme="dark_red.xml", css_file="material-fixes.qss")
         else:
             qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
+
+        if platform.system() == "Windows":
+            window.setup.set_windows_dark(settings["dark_mode"])
+            window.set_windows_dark(settings["dark_mode"])
+            cam.set_windows_dark(settings["dark_mode"])
 
     save_settings()
 
@@ -326,7 +336,29 @@ class MainWindow(QMainWindow):
         self.swerve_mod_3 = widgets.Swerve(strings.SWERVE_MOD.format(3))
         self.swerve_tab_layout.addWidget(self.swerve_mod_3, 1, 1)
 
+        if platform.system() == "Windows":
+            self.set_windows_dark(settings["dark_mode"])
+
         self.show()
+
+    def set_windows_dark(self, dark: bool):
+        if platform.system() == "Windows":
+            windll.LoadLibrary("dwmapi").DwmSetWindowAttribute(int(self.winId()),
+                                                               20,
+                                                               byref(c_bool(dark)), sizeof(BOOL))
+            if self.isMaximized() or self.isFullScreen() or self.maximumWidth() == self.width():
+                if self.isMaximized():
+                    self.showNormal()
+                    self.showMaximized()
+                elif self.isFullScreen():
+                    self.showNormal()
+                    self.showFullScreen()
+                elif self.maximumWidth() == self.width():
+                    self.resize(self.width()-1, self.height())
+                    self.resize(self.width()+1, self.height())
+            else:
+                self.resize(self.width()+1, self.height())
+                self.resize(self.width()-1, self.height())
 
     def update_conns(self):
         self.connection_status_widget.setVisible(not NetworkTables.isConnected())
@@ -393,6 +425,13 @@ class Settings(QMainWindow):
         self.cam_screen.spin.valueChanged.connect(lambda: update_setting("camera_screen", self.cam_screen.spin.value()))
         self.cam_layout.addWidget(self.cam_screen)
 
+        if platform.system() == "Windows":
+            self.set_windows_dark(settings["dark_mode"])
+
+    def set_windows_dark(self, dark: bool):
+        if platform.system() == "Windows":
+            windll.LoadLibrary("dwmapi").DwmSetWindowAttribute(int(self.winId()), 20, byref(c_bool(dark)), sizeof(BOOL))
+
 
 class CamMonitor(QMainWindow):
     def __init__(self):
@@ -446,10 +485,17 @@ class CamMonitor(QMainWindow):
 
         self.move(monitor.center())
 
+        if platform.system() == "Windows":
+            self.set_windows_dark(settings["dark_mode"])
+
         if (settings["camera_screen"] > 0 and len(QGuiApplication.screens()) > 1) or (settings["cam_fullscreen"]):
             self.showFullScreen()
         else:
             self.show()
+
+    def set_windows_dark(self, dark: bool):
+        if platform.system() == "Windows":
+            windll.LoadLibrary("dwmapi").DwmSetWindowAttribute(int(self.winId()), 20, byref(c_bool(dark)), sizeof(BOOL))
 
     def toggle_fullscreen(self):
         if self.isFullScreen():
@@ -499,7 +545,14 @@ class FirstRun(QMainWindow):
         self.tutorial = QPushButton(strings.TAKE_TUTORIAL)
         # self.button_layout.addWidget(self.tutorial)
 
+        if platform.system() == "Windows":
+            self.set_windows_dark(settings["dark_mode"])
+
         self.show()
+
+    def set_windows_dark(self, dark: bool):
+        if platform.system() == "Windows":
+            windll.LoadLibrary("dwmapi").DwmSetWindowAttribute(int(self.winId()), 20, byref(c_bool(dark)), sizeof(BOOL))
 
 
 if __name__ == "__main__":
