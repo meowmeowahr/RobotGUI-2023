@@ -57,6 +57,8 @@ CAM_TITLE = "Camera Stream"
 CAM_TOOLBAR = "Camera Browser Toolbar"
 
 # First Run
+FIRST_RUN_WINDOW_TITLE = "First Run"
+
 WELCOME = "Welcome to RobotGUI!"
 WELCOME_DET = "It looks like this is the first time running RobotGUI v{0}"
 

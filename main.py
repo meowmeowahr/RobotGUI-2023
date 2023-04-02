@@ -509,6 +509,9 @@ class FirstRun(QMainWindow):
     def __init__(self):
         super(FirstRun, self).__init__()
 
+        self.setWindowTitle(strings.FIRST_RUN_WINDOW_TITLE)
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), "res/icons/icon.svg")))
+
         self.root_widget = QWidget()
         self.setCentralWidget(self.root_widget)
 
