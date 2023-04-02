@@ -65,6 +65,7 @@ args = parser.parse_args()
 red = 0
 green = 0
 blue = 0
+prox = 0
 
 
 def value_changed(_, key, value, is_new):
@@ -129,7 +130,7 @@ def value_changed(_, key, value, is_new):
 
 def color_value_changed(_, key, value, is_new):
     """ Callback for Network Tables """
-    global red, green, blue
+    global red, green, blue, prox
     logging.debug(f"colorValueChanged: key: '{key}'; value: {value}; isNew: {is_new}")
 
     if "window" in globals().keys():
@@ -145,6 +146,10 @@ def color_value_changed(_, key, value, is_new):
             blue = float(value)
             get_updater().call_latest(window.color_blue.setText, f"Blue: {blue}")
             get_updater().call_latest(window.color_blue_bar.setValue, int(blue))
+        elif key == "colorSensorProx":
+            prox = float(value)
+            get_updater().call_latest(window.color_prox.setText, f"Prox: {prox}")
+            get_updater().call_latest(window.color_prox_bar.setValue, int(prox))
 
         get_updater().call_latest(window.color.setRGB, red, green, blue)
 
@@ -325,6 +330,13 @@ class MainWindow(QMainWindow):
         self.color_blue_bar.setStyleSheet("QProgressBar::chunk { background-color: #2196f3; }")
         self.color_side_layout.addWidget(self.color_blue_bar)
 
+        self.color_prox = QLabel("Prox: Unknown")
+        self.color_side_layout.addWidget(self.color_prox)
+
+        self.color_prox_bar = QProgressBar()
+        self.color_prox_bar.setRange(0, 65535)
+        self.color_side_layout.addWidget(self.color_prox_bar)
+
         # Swerve
         self.swerve_mod_0 = widgets.Swerve(strings.SWERVE_MOD.format(0))
         self.swerve_tab_layout.addWidget(self.swerve_mod_0, 0, 0)
@@ -345,22 +357,7 @@ class MainWindow(QMainWindow):
 
     def set_windows_dark(self, dark: bool):
         if platform.system() == "Windows":
-            windll.LoadLibrary("dwmapi").DwmSetWindowAttribute(int(self.winId()),
-                                                               20,
-                                                               byref(c_bool(dark)), sizeof(BOOL))
-            if self.isMaximized() or self.isFullScreen() or self.maximumWidth() == self.width():
-                if self.isMaximized():
-                    self.showNormal()
-                    self.showMaximized()
-                elif self.isFullScreen():
-                    self.showNormal()
-                    self.showFullScreen()
-                elif self.maximumWidth() == self.width():
-                    self.resize(self.width()-1, self.height())
-                    self.resize(self.width()+1, self.height())
-            else:
-                self.resize(self.width()+1, self.height())
-                self.resize(self.width()-1, self.height())
+            windll.LoadLibrary("dwmapi").DwmSetWindowAttribute(int(self.winId()), 20, byref(c_bool(dark)), sizeof(BOOL))
 
     def update_conns(self):
         self.connection_status_widget.setVisible(not NetworkTables.isConnected())
