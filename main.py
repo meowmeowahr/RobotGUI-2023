@@ -42,7 +42,7 @@ import strings
 import widgets
 
 
-__version__: Final[str] = "0.5.0"
+__version__: Final[str] = "0.5.1"
 
 DEFAULT_SETTINGS: Final[dict] = {
     "log_level": 20,
