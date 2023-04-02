@@ -179,6 +179,7 @@ def update_setting(key, value):
 
 def close_all_windows():
     window.setup.close()
+    window.about.close()
     window.close()
     cam.close()
 
