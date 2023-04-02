@@ -16,9 +16,10 @@ from typing import Final
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar, QToolBar, QToolButton)
+                             QProgressBar, QToolBar, QToolButton,
+                             QPushButton)
 from PyQt6.QtGui import QFont, QIcon, QCloseEvent, QGuiApplication
-from PyQt6.QtCore import QSize, QTimer, QUrl
+from PyQt6.QtCore import QSize, QTimer, QUrl, Qt
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 
@@ -39,12 +40,13 @@ import widgets
 __version__: Final[str] = "0.4.0"
 
 DEFAULT_SETTINGS: Final[dict] = {
-  "log_level": 20,
-  "dark_mode": True,
-  "ip": "10.63.69.2",
-  "camera_http": "http://10.63.69.14:1181/stream.mjpg?1680129953477",
-  "camera_screen": 1,
-  "cam_fullscreen": True
+    "log_level": 20,
+    "dark_mode": True,
+    "ip": "10.63.69.2",
+    "camera_http": "http://10.63.69.14:1181/stream.mjpg?1680129953477",
+    "camera_screen": 1,
+    "cam_fullscreen": True,
+    "first_run": True
 }
 
 # parse command line args
@@ -168,6 +170,11 @@ def update_setting(key, value):
 def close_all_windows():
     window.close()
     cam.close()
+
+
+def reload():
+    os.startfile(sys.argv[0])
+    sys.exit()
 
 
 class MainWindow(QMainWindow):
@@ -452,6 +459,49 @@ class CamMonitor(QMainWindow):
         update_setting("cam_fullscreen", self.isFullScreen())
 
 
+class FirstRun(QMainWindow):
+    def __init__(self):
+        super(FirstRun, self).__init__()
+
+        self.root_widget = QWidget()
+        self.setCentralWidget(self.root_widget)
+
+        self.root_layout = QVBoxLayout()
+        self.root_widget.setLayout(self.root_layout)
+
+        self.welcome = QLabel(strings.WELCOME)
+        self.welcome.setProperty('class', 'big_title')
+        self.welcome.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.root_layout.addWidget(self.welcome)
+
+        self.welcome_det = QLabel(strings.WELCOME_DET.format(__version__))
+        self.welcome_det.setProperty('class', 'welcome_det')
+        self.welcome_det.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.root_layout.addWidget(self.welcome_det)
+
+        self.root_layout.addStretch()
+
+        self.first_time_text = QLabel(strings.FIRST_TIME)
+        self.first_time_text.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.root_layout.addWidget(self.first_time_text)
+
+        self.root_layout.addStretch()
+
+        self.button_layout = QHBoxLayout()
+        self.root_layout.addLayout(self.button_layout)
+
+        self.button_layout.addStretch()
+
+        self.restart = QPushButton(strings.CLOSE)
+        self.restart.clicked.connect(self.close)
+        self.button_layout.addWidget(self.restart)
+
+        self.tutorial = QPushButton(strings.TAKE_TUTORIAL)
+        # self.button_layout.addWidget(self.tutorial)
+
+        self.show()
+
+
 if __name__ == "__main__":
     # settings
     if os.path.exists(args.settings):
@@ -466,11 +516,12 @@ if __name__ == "__main__":
     logging.debug(f"Loaded settings from {args.settings}")
 
     # NT
-    NetworkTables.initialize(server=settings["ip"])
-    sd = NetworkTables.getTable("SmartDashboard")
-    color = NetworkTables.getTable("RevColorSensor_V3")
-    sd.addEntryListener(value_changed)  # has to be done after setting up window
-    color.addEntryListener(color_value_changed)  # has to be done after setting up window
+    if not settings["first_run"]:
+        NetworkTables.initialize(server=settings["ip"])
+        sd = NetworkTables.getTable("SmartDashboard")
+        color = NetworkTables.getTable("RevColorSensor_V3")
+        sd.addEntryListener(value_changed)  # has to be done after setting up window
+        color.addEntryListener(color_value_changed)  # has to be done after setting up window
 
     # Qt Application
     app = QApplication(sys.argv)
@@ -485,7 +536,15 @@ if __name__ == "__main__":
         qt_material.apply_stylesheet(app, theme="light_red.xml", css_file="material-fixes.qss")
 
     # Windows
-    cam = CamMonitor()
-    window = MainWindow()
+    if settings["first_run"]:
+        settings["first_run"] = False
+        save_settings()
+
+        cam = None
+        window = None
+        fr = FirstRun()
+    else:
+        cam = CamMonitor()
+        window = MainWindow()
 
     sys.exit(app.exec())

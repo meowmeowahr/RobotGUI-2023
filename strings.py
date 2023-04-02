@@ -1,5 +1,10 @@
 """ Strings for RobotGUI """
 
+# strings.py Settings
+from typing import Final
+
+ENABLE_TUTORIAL: Final[bool] = False
+
 # Main
 APP_NAME = "RobotGUI"
 
@@ -51,8 +56,18 @@ CAM_TITLE = "Camera Stream"
 
 CAM_TOOLBAR = "Camera Browser Toolbar"
 
+# First Run
+WELCOME = "Welcome to RobotGUI!"
+WELCOME_DET = "It looks like this is the first time running RobotGUI v{0}"
+
+TAKE_TUTORIAL = "Take the Tutorial"
+
+FIRST_TIME = f"{'Take the tutorial or r' if ENABLE_TUTORIAL else 'R'}estart the app to start NetworkTables"
+
 # Misc
 UNKNOWN = "Unknown"
+
+CLOSE = "Close"
 
 
 if __name__ == "__main__":

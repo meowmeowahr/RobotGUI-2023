@@ -14,6 +14,16 @@ QSpinBox {{
     color: {QTMATERIAL_SECONDARYTEXTCOLOR};
 }}
 
+QPushButton {{
+  color: {QTMATERIAL_SECONDARYCOLOR};
+  background-color: {QTMATERIAL_PRIMARYCOLOR};
+}}
+
+QPushButton:focus {{
+  color: {QTMATERIAL_PRIMARYCOLOR};
+  background-color: {QTMATERIAL_SECONDARYDARKCOLOR};
+}}
+
 .swerve_frame {{
     background-color: {QTMATERIAL_SECONDARYCOLOR};
 }}
@@ -37,5 +47,15 @@ QSpinBox {{
 
 .velocity_title {{
     color: {QTMATERIAL_PRIMARYCOLOR};
+    font-weight: bold;
+}}
+
+.big_title {{
+    font-weight: bold;
+    font-size: 28px;
+    color: {QTMATERIAL_PRIMARYCOLOR};
+}}
+
+.welcome_det {{
     font-weight: bold;
 }}
