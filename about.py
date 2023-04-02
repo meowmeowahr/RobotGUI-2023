@@ -1,8 +1,8 @@
 """ The About Box used in RobotGUI """
 
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
-from PyQt5.QtCore import Qt, QBasicTimer, QSize
-from PyQt5.QtGui import QFont, QPalette, QPainter, QColor, QFontMetrics
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt6.QtCore import Qt, QBasicTimer, QSize
+from PyQt6.QtGui import QFont, QPalette, QPainter, QColor, QFontMetrics
 
 import strings
 

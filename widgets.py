@@ -1,8 +1,8 @@
 """ Widgets for RobotGUI """
 
-from PyQt5.QtWidgets import (QFrame, QHBoxLayout, QVBoxLayout,
+from PyQt6.QtWidgets import (QFrame, QHBoxLayout, QVBoxLayout,
                              QLineEdit, QLabel, QWidget, QSpinBox)
-from PyQt5.QtCore import Qt
+from PyQt6.QtCore import Qt
 
 import strings
 

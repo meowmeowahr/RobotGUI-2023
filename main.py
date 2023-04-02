@@ -10,15 +10,16 @@ import sys
 import os
 import re
 
+from typing import Final
+
 # Qt
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QMenuBar, QLabel,
                              QTabWidget, QWidget, QGridLayout,
                              QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QProgressBar, QToolBar, QDesktopWidget,
-                             QToolButton)
-from PyQt5.QtGui import QFont, QIcon, QCloseEvent
-from PyQt5.QtCore import QSize, QTimer, QUrl
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+                             QProgressBar, QToolBar, QToolButton)
+from PyQt6.QtGui import QFont, QIcon, QCloseEvent, QGuiApplication
+from PyQt6.QtCore import QSize, QTimer, QUrl
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 
 # Misc GUI
@@ -35,9 +36,9 @@ import strings
 import widgets
 
 
-__version__ = "0.4.0"
+__version__: Final[str] = "0.4.0"
 
-DEFAULT_SETTINGS = {
+DEFAULT_SETTINGS: Final[dict] = {
   "log_level": 20,
   "dark_mode": True,
   "ip": "10.63.69.2",
@@ -431,10 +432,14 @@ class CamMonitor(QMainWindow):
 
         self.setCentralWidget(self.web)
 
-        monitor = QDesktopWidget().screenGeometry(settings["camera_screen"])
+        if not settings["camera_screen"] + 1 > len(QGuiApplication.screens()):
+            monitor = QGuiApplication.screens()[settings["camera_screen"]].geometry()
+        else:
+            monitor = QGuiApplication.screens()[0].geometry()
+
         self.move(monitor.center())
 
-        if (settings["camera_screen"] > 0 and QDesktopWidget().screenCount() > 1) or (settings["cam_fullscreen"]):
+        if (settings["camera_screen"] > 0 and len(QGuiApplication.screens()) > 1) or (settings["cam_fullscreen"]):
             self.showFullScreen()
         else:
             self.show()
