@@ -35,8 +35,8 @@ SWERVE_MOD = "Swerve Mod {0}"
 SETUP_WINDOW_TITLE = "Settings"
 
 TAB_SETUP_THEME = "Theme"
-TAB_SETUP_CONNS = "Connection"
-TAB_SETUP_CAM = "Camera"
+TAB_SETUP_CONNS = "Network"
+TAB_SETUP_CAM = "Cam Screen"
 
 LABEL_CONNS_WARNING = "Restart the application for these settings to apply"
 LABEL_CAM_WARNING = "Restart the application for these settings to apply"

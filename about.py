@@ -11,7 +11,7 @@ class _WigglyWidget(QWidget):
     def __init__(self, parent=None) -> None:
         super(_WigglyWidget, self).__init__(parent)
 
-        self.setBackgroundRole(QPalette.Midlight)
+        self.setBackgroundRole(QPalette.ColorRole.Midlight)
         self.setAutoFillBackground(True)
 
         new_font = self.font()
@@ -67,18 +67,18 @@ class AboutBox(QWidget):
         self.title = QLabel(strings.APP_NAME)
         self.title.setStyleSheet("font-size: 26px;")
         self.title.mouseReleaseEvent = self.__ee_event
-        self.title.setAlignment(Qt.AlignCenter)
+        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.root_layout.addWidget(self.title)
 
         self.version = QLabel()
-        self.version.setAlignment(Qt.AlignCenter)
+        self.version.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.root_layout.addWidget(self.version)
 
         self.__ee = _WigglyWidget()
         self.__ee.setText(strings.ROBOT_NAME_EE)
         self.__ee.setFixedSize(QSize(280, 96))
         self.__ee.hide()
-        self.root_layout.addWidget(self.__ee, alignment=Qt.AlignCenter)
+        self.root_layout.addWidget(self.__ee, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def __ee_event(self, _):
         self.__ee_cnt += 1

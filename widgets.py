@@ -18,7 +18,7 @@ class ColorBlock(QFrame):
     def __init__(self) -> None:
         super(ColorBlock, self).__init__()
 
-        self.setFrameShape(QFrame.Box)
+        self.setFrameShape(QFrame.Shape.Box)
         self.setMinimumWidth(64)
 
         self.setMaximumSize(128, 128)
@@ -158,4 +158,4 @@ class HLine(QFrame):
     def __init__(self) -> None:
         super(HLine, self).__init__()
 
-        self.setFrameStyle(QFrame.HLine | QFrame.Plain)
+        self.setFrameStyle(QFrame.Shape.HLine)

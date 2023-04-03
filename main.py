@@ -189,11 +189,6 @@ def close_all_windows():
     cam.close()
 
 
-def reload():
-    os.startfile(sys.argv[0])
-    sys.exit()
-
-
 class MainWindow(QMainWindow):
     """ Main Window for RobotGUI """
 
