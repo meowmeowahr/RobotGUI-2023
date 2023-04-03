@@ -53,7 +53,9 @@ DEFAULT_SETTINGS: Final[dict] = {
     "camera_http": "http://10.63.69.14:1181/stream.mjpg?1680129953477",
     "camera_screen": 1,
     "cam_fullscreen": True,
-    "first_run": True
+    "first_run": True,
+    "repo": "meowmeowahr/RobotGUI-2023",
+    "show_updates": True
 }
 
 # parse command line args
