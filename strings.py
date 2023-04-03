@@ -11,6 +11,7 @@ APP_NAME = "RobotGUI"
 ROBOT_NAME_EE = bytes.fromhex("f09f908820456c204761746f204c6f636f20f09f9088").decode("utf-8")
 
 CONN_NOT_CONNECTED = "{0} does not have an active NetworkTables server."
+UPDATE_AVAIL = "Application update available v{1} -> v{0}"
 
 MENU_FILE = "File"
 MENU_HELP = "Help"

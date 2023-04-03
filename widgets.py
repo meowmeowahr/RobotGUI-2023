@@ -1,7 +1,7 @@
 """ Widgets for RobotGUI """
 
 from PyQt6.QtWidgets import (QFrame, QHBoxLayout, QVBoxLayout,
-                             QLineEdit, QLabel, QWidget, QSpinBox)
+                             QLineEdit, QLabel, QWidget, QSpinBox, QPushButton)
 from PyQt6.QtCore import Qt
 
 import strings
@@ -71,9 +71,11 @@ class QNamedSpinBox(QWidget):
         self.__layout.addWidget(self.spin)
 
 
-class ConnStatus(QFrame):
-    def __init__(self, text="") -> None:
-        super(ConnStatus, self).__init__()
+class StatusBar(QFrame):
+    def __init__(self, text="", closeable=False) -> None:
+        super(StatusBar, self).__init__()
+
+        self.closeable = closeable
 
         self.setFrameShape(QFrame.Shape.Box)
         self.setStyleSheet("background-color: #ef5350;")
@@ -86,6 +88,10 @@ class ConnStatus(QFrame):
         self.__text.setStyleSheet("font-weight: bold;")
         self.__text.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.__layout.addWidget(self.__text)
+
+    def mousePressEvent(self, QMouseEvent):
+        if self.closeable:
+            self.setVisible(False)
 
 
 class Swerve(QWidget):

@@ -41,6 +41,8 @@ import about
 import strings
 import widgets
 
+import update_checker
+
 
 __version__: Final[str] = "0.5.1"
 
@@ -225,13 +227,23 @@ class MainWindow(QMainWindow):
         self.root_widget.setLayout(self.root_layout)
 
         # Connection
-        self.connection_status_widget = widgets.ConnStatus(strings.CONN_NOT_CONNECTED.format(settings["ip"]))
+        self.connection_status_widget = widgets.StatusBar(strings.CONN_NOT_CONNECTED.format(settings["ip"]))
         self.root_layout.addWidget(self.connection_status_widget)
 
         self.connection_timer = QTimer()
         self.connection_timer.setInterval(1000)
         self.connection_timer.timeout.connect(self.update_conns)
         self.connection_timer.start()
+
+        # Update
+        if settings["show_updates"]:
+            self.versions = update_checker.UpdateChecker(settings["repo"], __version__.strip("v"))  # GitHub releases
+
+            self.update_status_widget = widgets.StatusBar(strings.UPDATE_AVAIL.format(self.versions.latest,
+                                                                                      self.versions.current),
+                                                          closeable=True)
+            self.update_status_widget.setVisible(self.versions.newer_available)
+            self.root_layout.addWidget(self.update_status_widget)
 
         # Tabs
         self.tab_widget = QTabWidget(self)
