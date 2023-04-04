@@ -44,7 +44,7 @@ import widgets
 import update_checker
 
 
-__version__: Final[str] = "0.6.0"
+__version__: Final[str] = "0.5.0"
 
 DEFAULT_SETTINGS: Final[dict] = {
     "log_level": 20,
@@ -243,7 +243,7 @@ class MainWindow(QMainWindow):
 
             self.update_status_widget = widgets.StatusBar(strings.UPDATE_AVAIL.format(self.versions.latest,
                                                                                       self.versions.current),
-                                                          closeable=True)
+                                                          closeable=True, severity=widgets.Serverity.WARN)
             self.update_status_widget.setVisible(self.versions.newer_available)
             self.root_layout.addWidget(self.update_status_widget)
 

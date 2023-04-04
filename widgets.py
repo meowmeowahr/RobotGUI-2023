@@ -4,11 +4,17 @@ from PyQt6.QtWidgets import (QFrame, QHBoxLayout, QVBoxLayout,
                              QLineEdit, QLabel, QWidget, QSpinBox, QPushButton)
 from PyQt6.QtCore import Qt
 
+import enum
+
 import strings
 
 
 def rgb_to_hex(rgb):
     return '%02x%02x%02x' % rgb
+
+class Serverity(enum.Enum):
+    SEVERE = 0
+    WARN = 1
 
 
 class ColorBlock(QFrame):
@@ -72,13 +78,16 @@ class QNamedSpinBox(QWidget):
 
 
 class StatusBar(QFrame):
-    def __init__(self, text="", closeable=False) -> None:
+    def __init__(self, text="", closeable=False, severity=Serverity.SEVERE) -> None:
         super(StatusBar, self).__init__()
 
         self.closeable = closeable
 
         self.setFrameShape(QFrame.Shape.Box)
-        self.setStyleSheet("background-color: #ef5350;")
+        if severity == Serverity.SEVERE:
+            self.setStyleSheet("background-color: #ef5350;")
+        elif severity == Serverity.WARN:
+            self.setStyleSheet("background-color: #ffc107;")
         self.setMinimumHeight(48)
 
         self.__layout = QHBoxLayout()
