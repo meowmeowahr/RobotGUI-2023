@@ -2,9 +2,9 @@
   "log_level": 20,
   "dark_mode": true,
   "ip": "10.63.69.2",
-  "camera_http": "http://10.63.69.14:1181/stream.mjpg?1680129953477",
+  "camera_http": "http://10.63.69.14:1182/stream.mjpg?1680570206646",
   "camera_screen": 1,
-  "cam_fullscreen": true,
+  "cam_fullscreen": false,
   "first_run": true,
   "repo": "meowmeowahr/RobotGUI-2023",
   "show_updates": true
