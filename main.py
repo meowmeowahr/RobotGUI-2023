@@ -44,7 +44,7 @@ import widgets
 import update_checker
 
 
-__version__: Final[str] = "0.5.0"
+__version__: Final[str] = "0.6.0"
 
 DEFAULT_SETTINGS: Final[dict] = {
     "log_level": 20,
